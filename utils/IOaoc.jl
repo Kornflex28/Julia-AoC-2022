@@ -21,4 +21,12 @@ function loadinput(nday::Int; test::Bool=false, verbose::Bool=true)
     end
 end
 
+function printsol(testsol1,testsol2,puzzlesol1,puzzlesol2)
+    @printf("Test solution 1   : %d\n",testsol1)
+    @printf("Test solution 2   : %d\n",testsol2)
+    println(" ")
+    @printf("Puzzle solution 1 : %d\n",puzzlesol1)
+    @printf("Puzzle solution 2 : %d\n",puzzlesol2)
+end
+
 end  # module

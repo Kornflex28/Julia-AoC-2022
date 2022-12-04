@@ -19,20 +19,13 @@ function solution2(data)
     sum(sort(map(sum,data),rev=true)[1:3])
 end
 
-testinput   = formatinput(IOaoc.loadinput(1,test=true))
-puzzleinput = formatinput(IOaoc.loadinput(1))
+testinput   = @timed formatinput(IOaoc.loadinput(1,test=true))
+puzzleinput = @timed formatinput(IOaoc.loadinput(1))
 
-testsol1   = solution1(testinput)
-puzzlesol1 = solution1(puzzleinput)
+testsol1   = @timed solution1(testinput.value)
+puzzlesol1 = @timed solution1(puzzleinput.value)
 
-testsol1   = solution1(testinput)
-puzzlesol1 = solution1(puzzleinput)
+testsol2   = @timed solution2(testinput.value)
+puzzlesol2 = @timed solution2(puzzleinput.value)
 
-testsol2   = solution2(testinput)
-puzzlesol2 = solution2(puzzleinput)
-
-@printf("Test solution 1   : %d\n",testsol1)
-@printf("Test solution 2   : %d\n",testsol2)
-
-@printf("Puzzle solution 1 : %d\n",puzzlesol1)
-@printf("Puzzle solution 2 : %d\n",puzzlesol2)
+IOaoc.printsol(testsol1.value,testsol2.value,puzzlesol1.value,puzzlesol2.value)
