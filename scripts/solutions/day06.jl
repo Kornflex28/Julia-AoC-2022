@@ -19,9 +19,9 @@ end
 
 # precompile for timing
 if benchmarkmode
-    testinput = @timed formatinput(IOaoc.loadinput(nday,test=true,verbose=verbose))
-    @timed solution1(testinput.value)
-    @timed solution2(testinput.value)
+    testinput = @timed IOaoc.loadinput(nday,test=true,verbose=verbose)[1]
+    @timed solution(testinput.value)
+    @timed solution(testinput.value)
 end
 
 testinput   = @timed IOaoc.loadinput(nday,test=true,verbose=verbose)[1]
