@@ -1,7 +1,13 @@
 using Printf
 using FromFile
-@from "../utils/IOaoc.jl" import IOaoc
+@from "$(normpath(joinpath(@__DIR__,"..","..","src","IOaoc.jl")))" import IOaoc
 
+## PARAMETERS
+benchmarkmode = (@isdefined benchmarkmode) ? benchmarkmode : false
+verbose = !benchmarkmode
+nday = 2
+
+## HELPER FUNCTIONS
 function convertRPS(l)
     if l in ["A" "X"]
         return 1
@@ -54,8 +60,17 @@ function solution2(data)
     sum(map(score,[playRPS(p,player=2) for p in plays]))
 end
 
-testinput   = @timed formatinput(IOaoc.loadinput(2,test=true))
-puzzleinput = @timed formatinput(IOaoc.loadinput(2))
+## MAIN
+
+# precompile for timing
+if benchmarkmode
+    testinput = @timed formatinput(IOaoc.loadinput(nday,test=true,verbose=verbose))
+    @timed solution1(testinput.value)
+    @timed solution2(testinput.value)
+end
+
+testinput   = @timed formatinput(IOaoc.loadinput(nday,test=true,verbose=verbose))
+puzzleinput = @timed formatinput(IOaoc.loadinput(nday,verbose=verbose))
 
 testsol1   = @timed solution1(testinput.value)
 puzzlesol1 = @timed solution1(puzzleinput.value)
@@ -63,5 +78,6 @@ puzzlesol1 = @timed solution1(puzzleinput.value)
 testsol2   = @timed solution2(testinput.value)
 puzzlesol2 = @timed solution2(puzzleinput.value)
 
-
-IOaoc.printsol(testsol1.value,testsol2.value,puzzlesol1.value,puzzlesol2.value)
+if verbose
+    IOaoc.printsol(testsol1.value,testsol2.value,puzzlesol1.value,puzzlesol2.value)
+end
