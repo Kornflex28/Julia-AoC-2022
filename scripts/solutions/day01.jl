@@ -10,39 +10,35 @@ nday = 1
 ## HELPER FUNCTIONS
 function formatinput(input)
     # Split input by empty string
-    splits = [firstindex(input)-1; findall(isempty,input); lastindex(input)+1]
+    splits = [firstindex(input) - 1; findall(isempty, input); lastindex(input) + 1]
     # Get index for each split
     s1, s2 = @view(splits[1:end-1]), @view(splits[2:end])
     # Get list of split
-    [[parse(Int,i) for i in sub] for sub in [view(input, i1+1:i2-1) for (i1, i2) in zip(s1, s2)]]
+    [[parse(Int, i) for i in sub] for sub in [view(input, i1+1:i2-1) for (i1, i2) in zip(s1, s2)]]
 end
 
-function solution1(data)
-    maximum(sum,data,dims=1)[1]
-end
+solution1(data) = maximum(sum, data, dims=1)[1]
 
-function solution2(data)
-    sum(sort(map(sum,data),rev=true)[1:3])
-end
+solution2(data) = sum(sort(map(sum, data), rev=true)[1:3])
 
 ## MAIN
 
 # precompile for timing
 if benchmarkmode
-    testinput = @timed formatinput(IOaoc.loadinput(nday,test=true,verbose=verbose))
+    testinput = @timed formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
     @timed solution1(testinput.value)
     @timed solution2(testinput.value)
 end
 
-testinput   = @timed formatinput(IOaoc.loadinput(nday,test=true,verbose=verbose))
-puzzleinput = @timed formatinput(IOaoc.loadinput(nday,verbose=verbose))
+testinput = @timed formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
+puzzleinput = @timed formatinput(IOaoc.loadinput(nday, verbose=verbose))
 
-testsol1   = @timed solution1(testinput.value)
+testsol1 = @timed solution1(testinput.value)
 puzzlesol1 = @timed solution1(puzzleinput.value)
 
-testsol2   = @timed solution2(testinput.value)
+testsol2 = @timed solution2(testinput.value)
 puzzlesol2 = @timed solution2(puzzleinput.value)
 
 if verbose
-    IOaoc.printsol(testsol1.value,testsol2.value,puzzlesol1.value,puzzlesol2.value)
+    IOaoc.printsol(testsol1.value, testsol2.value, puzzlesol1.value, puzzlesol2.value)
 end
