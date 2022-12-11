@@ -1,0 +1,28 @@
+name: plot-performance
+on: [push, workflow_dispatch]
+jobs:
+  plot-performance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.8.3
+
+      - name: Build Pkg
+        uses: julia-actions/julia-buildpkg@v1
+
+      - name: Run Julia script
+        env:
+          GKSwstype: "100" # https://discourse.julialang.org/t/generation-of-documentation-fails-qt-qpa-xcb-could-not-connect-to-display/60988
+        run: julia --project ./scripts/plot_performance.jl
+
+      - name: Commit new files
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: "Updated performance plots"
+          pull: "--rebase --autostash"

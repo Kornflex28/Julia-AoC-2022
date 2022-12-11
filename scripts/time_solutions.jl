@@ -3,7 +3,7 @@ using Printf
 ## PARAMETERS TO UPDATE
 
 # Number of evaluation of each solution script
-neval = 5
+neval = (@isdefined neval) ? neval : 1
 benchmarkmode = true
 
 ## PARAMETERS

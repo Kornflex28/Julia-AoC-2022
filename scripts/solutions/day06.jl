@@ -22,7 +22,7 @@ end
 if benchmarkmode
     testinput = @timed IOaoc.loadinput(nday, test=true, verbose=verbose)[1]
     @timed solution(testinput.value)
-    @timed solution(testinput.value)
+    @timed solution(testinput.value,kelem=14)
 end
 
 testinput = @timed IOaoc.loadinput(nday, test=true, verbose=verbose)[1]
