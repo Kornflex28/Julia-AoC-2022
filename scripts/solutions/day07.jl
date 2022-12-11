@@ -21,11 +21,11 @@ if !(@isdefined Dir)
     end
 
     mutable struct Dir <: AbstractDir
-        name::String
+        name::AbstractString
         parent::Union{Dir,Nothing}
         children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}
 
-        function Dir(name::String, parent::Union{Dir,Nothing}=nothing, children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}=nothing)
+        function Dir(name::AbstractString, parent::Union{Dir,Nothing}=nothing, children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}=nothing)
             d = new(name, parent, children)
             if !isnothing(parent)
                 addchildren!(parent, d)
@@ -34,7 +34,7 @@ if !(@isdefined Dir)
         end
     end
 
-    function findchildbyname(d::Dir, name::String; isDir=true)
+    function findchildbyname(d::Dir, name::AbstractString; isDir=true)
         if isDir
             return d.children[findfirst(c -> isa(c, Dir) && c.name == name, d.children)]
         else
@@ -47,10 +47,10 @@ end
 
 if !(@isdefined File)
     mutable struct File <: AbstractFile
-        name::String
+        name::AbstractString
         parent::Dir
         size::Int
-        function File(name::String, parent::Dir, size::Int)
+        function File(name::AbstractString, parent::Dir, size::Int)
             f = new(name, parent, size)
             addchildren!(parent, f)
             return f
@@ -113,13 +113,13 @@ function formatinput(input)
             for l in ls
                 dirorsize, name = split(l)
                 if dirorsize == "dir"
-                    Dir(String(name), currentdir)
+                    Dir(name, currentdir)
                 else
-                    File(String(name), currentdir, parse(Int, dirorsize))
+                    File(name, currentdir, parse(Int, dirorsize))
                 end
             end
         else # cd
-            targetdir = String(ags[1])
+            targetdir = ags[1]
             if targetdir == "/"
                 currentdir = root
             elseif targetdir == ".."
