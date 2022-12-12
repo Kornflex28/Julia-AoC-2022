@@ -46,22 +46,24 @@ end
 
 ## MAIN
 
-# precompile for timing
 if benchmarkmode
-    testinput = @timed formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
-    @timed solution(testinput.value)
-    @timed solution(testinput.value,nknots=10)
-end
 
-testinput = @timed formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
-puzzleinput = @timed formatinput(IOaoc.loadinput(nday, verbose=verbose))
+    tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))
+    tsolution1(input) = solution(input)
+    tsolution2(input) = solution(input,nknots=10)
 
-testsol1 = @timed solution(testinput.value)
-puzzlesol1 = @timed solution(puzzleinput.value)
+else
 
-testsol2 = @timed solution(testinput.value,nknots=10)
-puzzlesol2 = @timed solution(puzzleinput.value,nknots=10)
+    testinput = formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
+    puzzleinput = formatinput(IOaoc.loadinput(nday, verbose=verbose))
 
-if verbose
-    IOaoc.printsol(testsol1.value, testsol2.value, puzzlesol1.value, puzzlesol2.value)
+    testsol1 = solution(testinput)
+    puzzlesol1 = solution(puzzleinput)
+
+    testsol2 = solution(testinput,nknots=10)
+    puzzlesol2 = solution(puzzleinput,nknots=10)
+
+    if verbose
+        IOaoc.printsol(testsol1, testsol2, puzzlesol1, puzzlesol2)
+    end
 end

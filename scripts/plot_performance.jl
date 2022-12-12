@@ -6,7 +6,7 @@ using Dates
 using Plots.PlotMeasures
 
 ## PARAMETERS
-neval = 10
+neval = 500
 include(joinpath(@__DIR__, "time_solutions.jl"))
 # exectimes [neval;nfiles;[formattest,solvetest1,solvetest2,formatpuzzle,solvepuzzle1,solvepuzzle2]]
 
@@ -35,12 +35,15 @@ for (k, thm) in enumerate(["light", "dark"])
      xticks!(collect(1:nfiles))
      threshold = log10(5)
      mnexp = round(log10(minimum(mediantimes)) - threshold + 0.5)
-     mxexp = ceil(log10(maximum(mediantimes[8,:]))) + 1
-     ylims!(0.2 * 10^mnexp, 5 * 10^(mxexp))
+     mxexp = ceil(log10(maximum(mediantimes))) + 2
+     ylims!(0.2 * 10^mnexp, 10^(mxexp))
      yticks!(10 .^ (mnexp:mxexp))
 
      plot!(legendcolumns=1)
      annotate!(0.5 + nfiles / 2, 1.4 * ylims()[2], text(annotation_str, :center, 8, color=textcolors[k]))
 
-     savefig(joinpath(@__DIR__, "..", "figs", "time_performance_$(thm).svg"))
+     figname = "time_performance_$(thm).svg"
+     figpath = normpath(joinpath(@__DIR__, "..", "figs", figname))
+     savefig(figpath)
+     println("Saved to $(figpath)")
 end
