@@ -23,28 +23,28 @@ end
 
 function printsol(testsol1, testsol2, puzzlesol1, puzzlesol2)
     if typeof(testsol1) <: Number
-        @printf("Test solution 1   : %d\n", testsol1)
+        @printf("Test solution 1   :\n%d\n", testsol1)
     else
-        @printf("Test solution 1   : %s\n", testsol1)
+        @printf("Test solution 1   :\n%s\n", testsol1)
     end
 
     if typeof(testsol2) <: Number
-        @printf("Test solution 2   : %d\n", testsol2)
+        @printf("Test solution 2   :\n%d\n", testsol2)
     else
-        @printf("Test solution 2   : %s\n", testsol2)
+        @printf("Test solution 2   :\n%s\n", testsol2)
     end
 
     println(" ")
 
     if typeof(puzzlesol1) <: Number
-        @printf("Puzzle solution 1 : %d\n", puzzlesol1)
+        @printf("Puzzle solution 1 :\n%d\n", puzzlesol1)
     else
-        @printf("Puzzle solution 1 : %s\n", puzzlesol1)
+        @printf("Puzzle solution 1 :\n%s\n", puzzlesol1)
     end
     if typeof(puzzlesol2) <: Number
-        @printf("Puzzle solution 2 : %d\n", puzzlesol2)
+        @printf("Puzzle solution 2 :\n%d\n", puzzlesol2)
     else
-        @printf("Puzzle solution 2 : %s\n", puzzlesol2)
+        @printf("Puzzle solution 2 :\n%s\n", puzzlesol2)
     end
 end
 
