@@ -27,7 +27,7 @@ for (k, thm) in enumerate(["light", "dark"])
      plot(title="Time performance of Julia solutions for AoC 2022", xlabel="Day",
           ylabel=@sprintf("Run time [s]\n(median, %d runs)", neval),
           yminorgrid=true, yminorgridalpha=0.1, size=(800, 400), margin=3mm,
-          backgroundcolor=backgroundcolors[k])
+          background_color=backgroundcolors[k])
 
      plot!(mediantimes, legend=:topleft, label=["Test format" "Test solve 1" "Test Solve 2" "Puzzle format" "Puzzle solve 1" "Puzzle solve 2"],
           yscale=:log10, color=reduce(hcat, barcolors[k, :]), line=:dash, linewidth=[1 1 1 2 2 2], marker=[:circle :circle :circle :diamond :diamond :diamond])
