@@ -27,12 +27,12 @@ for (ksol, sol) in enumerate(solutions)
         @printf("\r(%d/%d) Execution %d/%d of %s ...", (ksol - 1) * neval + keval, ntotal, keval, neval, sol)
 
         # Execute solution
-        testinput = @timed tformatinput(ksol, test=true)
-        testsol1 = @timed tsolution1(testinput.value)
-        testsol2 = @timed tsolution2(testinput.value)
         puzzleinput = @timed tformatinput(ksol)
         puzzlesol1 = @timed tsolution1(puzzleinput.value)
         puzzlesol2 = @timed tsolution2(puzzleinput.value)
+        testinput = @timed tformatinput(ksol, test=true)
+        testsol1 = @timed tsolution1(testinput.value)
+        testsol2 = @timed tsolution2(testinput.value)
 
         keval == 0 && continue # Don't consider first run (always longer)
 

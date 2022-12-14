@@ -9,20 +9,20 @@ nday = 5
 
 ## HELPER FUNCTIONS
 function formatinput(input)
-    sep_ind = findfirst(isempty, input)
-    input[sep_ind+1:end]
+    sepind = findfirst(isempty, input)
+    input[sepind+1:end]
 
-    ncolumns = parse(Int, input[sep_ind-1][findall(r"(\d)", input[sep_ind-1])[end]])
-    crate_ind = 2:4:(ncolumns*4)
+    ncolumns = parse(Int, input[sepind-1][findall(r"(\d)", input[sepind-1])[end]])
+    crateind = 2:4:(ncolumns*4)
     stacks = [[] for _ = 1:ncolumns]
-    for kline = 1:(sep_ind-2)
-        for (kcrate, crate) in enumerate(input[kline][crate_ind])
+    for kline = 1:(sepind-2)
+        for (kcrate, crate) in enumerate(input[kline][crateind])
             if crate != ' '
                 push!(stacks[kcrate], crate)
             end
         end
     end
-    moves = [[parse(Int, m) for m in split(move, r"(move|from|to)", keepempty=false)] for move in input[(sep_ind+1):end]]
+    moves = [[parse(Int, m) for m in split(move, r"(move|from|to)", keepempty=false)] for move in input[(sepind+1):end]]
     return (stacks, moves)
 end
 

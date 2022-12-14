@@ -75,12 +75,12 @@ if !(@isdefined File)
     end
 
     function Base.show(io::IO, s::Union{Dir,File})
-        parent_str = isnothing(s.parent) ? nothing : s.parent.name
-        children_str = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c in s.children], ",")
-        if isnothing(children_str)
-            print(io, "[$(s.name), $(parent_str)]")
+        parentstr = isnothing(s.parent) ? nothing : s.parent.name
+        childrenstr = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c in s.children], ",")
+        if isnothing(childrenstr)
+            print(io, "[$(s.name), $(parentstr)]")
         else
-            print(io, "[$(s.name), $(parent_str), ($(children_str))]")
+            print(io, "[$(s.name), $(parentstr), ($(childrenstr))]")
         end
     end
 
@@ -93,23 +93,23 @@ end
 function formatinput(input)
 
     # Find all command occ
-    cmd_ind = findall(l -> occursin(r"^\$", l), input)
-    cmd_ind = cmd_ind[2:end]
+    cmdind = findall(l -> occursin(r"^\$", l), input)
+    cmdind = cmdind[2:end]
     # Create list of [(cmd,args[])]
-    cmd_args = map(splitcmd, input[cmd_ind])
-    push!(cmd_ind, length(input) + 1)
+    cmdargs = map(splitcmd, input[cmdind])
+    push!(cmdind, length(input) + 1)
 
     # Create file tree
     root = Dir("/")
     currentdir = root
 
-    for k in eachindex(cmd_args)
-        cmd, ags = cmd_args[k]
+    for k in eachindex(cmdargs)
+        cmd, ags = cmdargs[k]
 
         # If cmd is ls, update file tree
         if cmd == "ls"
             # Loop through all ls result
-            ls = input[cmd_ind[k]+1:cmd_ind[k+1]-1]
+            ls = input[cmdind[k]+1:cmdind[k+1]-1]
             for l in ls
                 dirorsize, name = split(l)
                 if dirorsize == "dir"

@@ -26,10 +26,10 @@ end
 function solution2(ops)
     X = get_register(ops)[1:240]
     cycles = (0:239) .% 40
-    cycles_m1 = cycles .- 1
-    cycles_p1 = cycles .+ 1
+    cyclesm1 = cycles .- 1
+    cyclesp1 = cycles .+ 1
     crt = ['.' for _ = 1:length(cycles)]
-    pixels = (X .== cycles) .|| (X .== cycles_m1) .|| (X .== cycles_p1)
+    pixels = (X .== cycles) .|| (X .== cyclesm1) .|| (X .== cyclesp1)
     crt[pixels] .= '#'
     return join([reshape(crt, 40, 6); ['\n' '\n' '\n' '\n' '\n' '\n']])
 end
