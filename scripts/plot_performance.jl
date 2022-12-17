@@ -22,7 +22,7 @@ annotationstr = @sprintf("generated on %s - %s (GitHub Actions)", Dates.format(n
 ## MAIN
 mediantimes = dropdims(median(exectimes, dims=1), dims=1)
 
-for (k, thm) in enumerate(["light", "dark"])
+for (k, thm) ∈ enumerate(["light", "dark"])
 
      plot(title="Time performance of Julia solutions for AoC 2022", xlabel="Day",
           ylabel=@sprintf("Run time [s]\n(median, %d runs)", neval),

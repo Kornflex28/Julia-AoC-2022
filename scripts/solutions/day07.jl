@@ -61,7 +61,7 @@ if !(@isdefined File)
         if isa(dorf, File)
             return dorf.size
         else
-            return sum([getsize(child) for child in dorf.children])
+            return sum([getsize(child) for child ∈ dorf.children])
         end
     end
 
@@ -70,13 +70,13 @@ if !(@isdefined File)
             return []
         else
             childrendir = d.children[findall(c -> isa(c, Dir), d.children)]
-            return [d [getalldirs(c) for c in childrendir]...]
+            return [d [getalldirs(c) for c ∈ childrendir]...]
         end
     end
 
     function Base.show(io::IO, s::Union{Dir,File})
         parentstr = isnothing(s.parent) ? nothing : s.parent.name
-        childrenstr = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c in s.children], ",")
+        childrenstr = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c ∈ s.children], ",")
         if isnothing(childrenstr)
             print(io, "[$(s.name), $(parentstr)]")
         else
@@ -103,14 +103,14 @@ function formatinput(input)
     root = Dir("/")
     currentdir = root
 
-    for k in eachindex(cmdargs)
+    for k ∈ eachindex(cmdargs)
         cmd, ags = cmdargs[k]
 
         # If cmd is ls, update file tree
         if cmd == "ls"
             # Loop through all ls result
             ls = input[cmdind[k]+1:cmdind[k+1]-1]
-            for l in ls
+            for l ∈ ls
                 dirorsize, name = split(l)
                 if dirorsize == "dir"
                     Dir(name, currentdir)
@@ -135,12 +135,12 @@ end
 
 
 function solution1(root; sizelim=100000)
-    dirsizes = [getsize(d) for d in getalldirs(root)]
+    dirsizes = [getsize(d) for d ∈ getalldirs(root)]
     return sum(dirsizes[dirsizes.<=sizelim])
 end
 
 function solution2(root; sizelim=30000000, totalsize=70000000)
-    dirsizes = [getsize(d) for d in getalldirs(root)]
+    dirsizes = [getsize(d) for d ∈ getalldirs(root)]
     return minimum(dirsizes[sizelim.<=((totalsize-dirsizes[1]).+dirsizes)])
 end
 

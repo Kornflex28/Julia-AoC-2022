@@ -15,14 +15,12 @@ function formatinput(input)
     ncolumns = parse(Int, input[sepind-1][findall(r"(\d)", input[sepind-1])[end]])
     crateind = 2:4:(ncolumns*4)
     stacks = [[] for _ = 1:ncolumns]
-    for kline = 1:(sepind-2)
-        for (kcrate, crate) in enumerate(input[kline][crateind])
-            if crate != ' '
-                push!(stacks[kcrate], crate)
-            end
+    for kline = 1:(sepind-2), (kcrate, crate) ∈ enumerate(input[kline][crateind])
+        if crate != ' '
+            push!(stacks[kcrate], crate)
         end
     end
-    moves = [[parse(Int, m) for m in split(move, r"(move|from|to)", keepempty=false)] for move in input[(sepind+1):end]]
+    moves = [[parse(Int, m) for m ∈ split(move, r"(move|from|to)", keepempty=false)] for move ∈ input[(sepind+1):end]]
     return (stacks, moves)
 end
 
@@ -37,7 +35,7 @@ function makemove(stacks, move; crane=0)
 end
 
 function rearrange(stacks, moves; crane=0)
-    for move in moves
+    for move ∈ moves
         stacks = makemove(stacks, move, crane=crane)
     end
     return stacks
@@ -46,13 +44,13 @@ end
 function solution1(data)
     stacks1, moves1 = deepcopy(data[1]), deepcopy(data[2])
     stacks1 = rearrange(stacks1, moves1)
-    join([crates[1] for crates in stacks1])
+    join([crates[1] for crates ∈ stacks1])
 end
 
 function solution2(data)
     stacks2, moves2 = deepcopy(data[1]), deepcopy(data[2])
     stacks2 = rearrange(stacks2, moves2, crane=1)
-    join([crates[1] for crates in stacks2])
+    join([crates[1] for crates ∈ stacks2])
 end
 
 ## MAIN

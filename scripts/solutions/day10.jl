@@ -8,7 +8,7 @@ verbose = !benchmarkmode
 nday = 10
 
 ## HELPER FUNCTIONS
-formatinput(input) = reduce(hcat, [(1 < length(l)) ? [1, parse(Int, l[2])] : [-1, 0] for l in map(split, input)])'
+formatinput(input) = reduce(hcat, [(1 < length(l)) ? [1, parse(Int, l[2])] : [-1, 0] for l ∈ map(split, input)])'
 
 function get_register(ops)
     addxind = findall(0 .< ops[:, 1])

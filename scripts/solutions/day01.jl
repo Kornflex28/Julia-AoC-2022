@@ -14,7 +14,7 @@ function formatinput(input)
     # Get index for each split
     s1, s2 = @view(splits[1:end-1]), @view(splits[2:end])
     # Get list of split
-    [[parse(Int, i) for i in sub] for sub in [view(input, i1+1:i2-1) for (i1, i2) in zip(s1, s2)]]
+    [[parse(Int, i) for i ∈ sub] for sub ∈ [view(input, i1+1:i2-1) for (i1, i2) ∈ zip(s1, s2)]]
 end
 
 solution1(data) = maximum(sum, data, dims=1)[1]

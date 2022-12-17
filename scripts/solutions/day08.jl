@@ -8,7 +8,7 @@ verbose = !benchmarkmode
 nday = 8
 
 ## HELPER FUNCTIONS
-formatinput(input) = reduce(hcat, [[parse(Int, c) for c in l] for l in input])'
+formatinput(input) = reduce(hcat, [[parse(Int, c) for c ∈ l] for l ∈ input])'
 
 function isvisible(grid, krow, kcol)
     h = grid[krow, kcol]
@@ -38,10 +38,8 @@ end
 function solution1(grid)
     nrow, ncol = size(grid)
     visiblecount = 2 * (nrow + ncol) - 4
-    for krow = 2:(nrow-1)
-        for kcol = 2:(ncol-1)
-            visiblecount += isvisible(grid, krow, kcol)
-        end
+    for krow = 2:(nrow-1), kcol = 2:(ncol-1)
+        visiblecount += isvisible(grid, krow, kcol)
     end
     return visiblecount
 end
@@ -49,10 +47,8 @@ end
 function solution2(grid)
     nrow, ncol = size(grid)
     scenicgrid = zeros(nrow, ncol)
-    for krow = 2:(nrow-1)
-        for kcol = 2:(ncol-1)
-            scenicgrid[krow, kcol] = scenicscore(grid, krow, kcol)
-        end
+    for krow = 2:(nrow-1), kcol = 2:(ncol-1)
+        scenicgrid[krow, kcol] = scenicscore(grid, krow, kcol)
     end
     return maximum(scenicgrid)
 end

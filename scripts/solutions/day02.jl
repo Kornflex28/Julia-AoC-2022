@@ -9,9 +9,9 @@ nday = 2
 
 ## HELPER FUNCTIONS
 function convertRPS(l)
-    if l in ["A" "X"]
+    if l ∈ ["A" "X"]
         return 1
-    elseif l in ["B" "Y"]
+    elseif l ∈ ["B" "Y"]
         return 2
     else
         return 3
@@ -43,15 +43,15 @@ end
 
 score(results) = sum(results)
 
-formatinput(input) = [[convertRPS(l) for l in row] for row in map(split, input)]
+formatinput(input) = [[convertRPS(l) for l ∈ row] for row ∈ map(split, input)]
 
-solution1(data) = sum(map(score, [playRPS(p, player=2) for p in data]))
+solution1(data) = sum(map(score, [playRPS(p, player=2) for p ∈ data]))
 
 function solution2(data)
-    plays1 = [plays[1] for plays in data]
-    plays2 = [plays[2] for plays in data]
-    plays = [[plays1[k], possibleRPS(plays1[k])[plays2[k]]] for k in eachindex(plays1)]
-    sum(map(score, [playRPS(p, player=2) for p in plays]))
+    plays1 = [plays[1] for plays ∈ data]
+    plays2 = [plays[2] for plays ∈ data]
+    plays = [[plays1[k], possibleRPS(plays1[k])[plays2[k]]] for k ∈ eachindex(plays1)]
+    sum(map(score, [playRPS(p, player=2) for p ∈ plays]))
 end
 
 ## MAIN

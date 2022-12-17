@@ -19,11 +19,11 @@ exectimes = fill(NaN, (neval, nfiles, 6))
 ## MAIN
 
 # Loop through solutions
-for (ksol, sol) in enumerate(solutions)
+for (ksol, sol) ∈ enumerate(solutions)
 
     include(sol) # "Import" functions
 
-    for keval in 0:neval
+    for keval ∈ 0:neval
         @printf("\r(%d/%d) Execution %d/%d of %s ...", (ksol - 1) * neval + keval, ntotal, keval, neval, sol)
 
         # Execute solution
