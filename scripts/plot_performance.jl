@@ -11,7 +11,7 @@ include(joinpath(@__DIR__, "time_solutions.jl"))
 # exectimes [neval;nfiles;[formattest,solvetest1,solvetest2,formatpuzzle,solvepuzzle1,solvepuzzle2]]
 
 lightbarcolors = [:peachpuff2 :chocolate :brown4 :lightskyblue :deepskyblue3 :navy]
-darkbarcolors = [:gold :darkorange :firebrick1 :lightslateblue :springgreen3 :royalblue1]
+darkbarcolors = [:gold :darkorange :firebrick1 :lightslateblue :springgreen3 :deepskyblue]
 # barcolors = [lightbarcolors; darkbarcolors]
 barcolors = [darkbarcolors; darkbarcolors]
 backgroundcolors = [:white nothing]
