@@ -16,15 +16,15 @@ function possible_neighbors(heightmap, rc)
     Iterators.filter(x -> (x ∈ keys(heightmap) && (heightmap[x] - heightmap[rc] < 2)), ((r + dr, c + dc) for (dr, dc) ∈ [(-1, 0) (1, 0) (0, 1) (0, -1)]))
 end
 
-function climb(heightmap, steps, iso)
+function climb!(heightmap, steps, iso)
     nextmoves = Set([rcdrdc for rc ∈ last(iso) for rcdrdc ∈ possible_neighbors(heightmap, rc) if rcdrdc ∉ keys(steps)])
     merge!(steps, Dict(rc => length(iso) for rc ∈ nextmoves))
-    isempty(nextmoves) || climb(heightmap, steps, [iso nextmoves])
+    isempty(nextmoves) || climb!(heightmap, steps, [iso nextmoves])
 end
 
 function isoheights(heightmap, rcstarts)
     steps = Dict(rc => 0 for rc ∈ rcstarts)
-    climb(heightmap, steps, [Set(rcstarts)])
+    climb!(heightmap, steps, [Set(rcstarts)])
     return steps
 end
 

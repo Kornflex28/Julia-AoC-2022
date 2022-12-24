@@ -28,7 +28,7 @@ function formatinput(input)
     return (valvesadjency, valvesflow, valvesbin)
 end
 
-function getmaxstatesflows(valvesadjency, valvesflow, valvesbin, currentvalve, minutesleft, currentstate, currentflow, statesflows)
+function getmaxstatesflows!(valvesadjency, valvesflow, valvesbin, currentvalve, minutesleft, currentstate, currentflow, statesflows)
     # Get for all states of opened valves (represented as a binary number) its maximum final flow 
 
     # Set total flow of current state of opened valves to maximum of possible flows for that state
@@ -42,21 +42,21 @@ function getmaxstatesflows(valvesadjency, valvesflow, valvesbin, currentvalve, m
         # Compute new state flow (by opening next valve)
         newstate = currentstate | valvesbin[nextvalve]
         newcurrentflow = currentflow + newminutesleft * valvesflow[nextvalve]
-        getmaxstatesflows(valvesadjency, valvesflow, valvesbin, nextvalve, newminutesleft, newstate, newcurrentflow, statesflows)
+        getmaxstatesflows!(valvesadjency, valvesflow, valvesbin, nextvalve, newminutesleft, newstate, newcurrentflow, statesflows)
     end
     return statesflows
 end
 
 function solution1(data; startingvalve="AA", minutesleft=30)
     valvesadjency, valvesflow, valvesbin = data
-    maxstatesflows = getmaxstatesflows(valvesadjency, valvesflow, valvesbin, startingvalve, minutesleft, 0, 0, Dict())
+    maxstatesflows = getmaxstatesflows!(valvesadjency, valvesflow, valvesbin, startingvalve, minutesleft, 0, 0, Dict())
     # Return best states
     return maximum(values(maxstatesflows))
 end
 
 function solution2(data; startingvalve="AA", minutesleft=26)
     valvesadjency, valvesflow, valvesbin = data
-    maxstatesflows = getmaxstatesflows(valvesadjency, valvesflow, valvesbin, startingvalve, minutesleft, 0, 0, Dict())
+    maxstatesflows = getmaxstatesflows!(valvesadjency, valvesflow, valvesbin, startingvalve, minutesleft, 0, 0, Dict())
     # Return best combinaison of states that share no common opened valves
     return maximum(flow1 + flow2 for (state1, flow1) in maxstatesflows, (state2, flow2) in maxstatesflows if (state1 & state2) == 0)
 end

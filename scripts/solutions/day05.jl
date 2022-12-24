@@ -24,7 +24,7 @@ function formatinput(input)
     return (stacks, moves)
 end
 
-function makemove(stacks, move; crane=0)
+function makemove!(stacks, move; crane=0)
     if crane != 0
         stacks[move[3]] = [stacks[move[2]][1:move[1]]..., stacks[move[3]]...]
     else
@@ -34,22 +34,22 @@ function makemove(stacks, move; crane=0)
     return stacks
 end
 
-function rearrange(stacks, moves; crane=0)
+function rearrange!(stacks, moves; crane=0)
     for move ∈ moves
-        stacks = makemove(stacks, move, crane=crane)
+        stacks = makemove!(stacks, move, crane=crane)
     end
     return stacks
 end
 
 function solution1(data)
-    stacks1, moves1 = deepcopy(data[1]), deepcopy(data[2])
-    stacks1 = rearrange(stacks1, moves1)
+    stacks1, moves1 = map(deepcopy,data)
+    stacks1 = rearrange!(stacks1, moves1)
     join([crates[1] for crates ∈ stacks1])
 end
 
 function solution2(data)
-    stacks2, moves2 = deepcopy(data[1]), deepcopy(data[2])
-    stacks2 = rearrange(stacks2, moves2, crane=1)
+    stacks2, moves2 = map(deepcopy,data)
+    stacks2 = rearrange!(stacks2, moves2, crane=1)
     join([crates[1] for crates ∈ stacks2])
 end
 

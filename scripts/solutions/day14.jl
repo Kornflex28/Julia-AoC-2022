@@ -52,7 +52,7 @@ function fall(rocks, sands, start)
     return nextpos
 end
 
-function fall2(rocks, sands, start, maxheight)
+function fall2!(rocks, sands, start, maxheight)
     oldpos = start
     nextpos = nextmove(rocks, sands, start)
     while nextpos != oldpos
@@ -89,7 +89,7 @@ function solution2(rocks; sandstart=(500, 0))
     units = 0
     fallpos = (0, 0)
     while fallpos != sandstart
-        fallpos = fall2(rocks, sands, sandstart, maxheight)
+        fallpos = fall2!(rocks, sands, sandstart, maxheight)
         units += 1
         push!(sands, fallpos)
     end

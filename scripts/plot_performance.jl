@@ -29,10 +29,10 @@ for (k, thm) ∈ enumerate(["light", "dark"])
           yminorgrid=true, yminorgridalpha=0.1, size=(800, 400), margin=3mm,
           background_color=backgroundcolors[k])
 
-     plot!(mediantimes, legend=:topleft, label=["Test format" "Test solve 1" "Test Solve 2" "Puzzle format" "Puzzle solve 1" "Puzzle solve 2"],
+     plot!(days,mediantimes, legend=:topleft, label=["Test format" "Test solve 1" "Test Solve 2" "Puzzle format" "Puzzle solve 1" "Puzzle solve 2"],
           yscale=:log10, color=reduce(hcat, barcolors[k, :]), line=:dash, linewidth=[1 1 1 2 2 2], marker=[:circle :circle :circle :diamond :diamond :diamond])
 
-     xticks!(collect(1:nfiles))
+     xticks!(1:maximum(days))
      threshold = log10(5)
      mnexp = round(log10(minimum(mediantimes)) - threshold + 0.5)
      mxexp = ceil(log10(maximum(mediantimes)))
