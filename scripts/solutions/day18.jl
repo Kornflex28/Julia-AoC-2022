@@ -39,6 +39,8 @@ function solution2(scans)
     return sum([(x + dx, y + dy, z + dz) ∈ outershell for (x, y, z) ∈ scans, (dx, dy, dz) ∈ neighbours])
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

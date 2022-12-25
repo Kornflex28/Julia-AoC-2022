@@ -61,6 +61,8 @@ function solution2(data; startingvalve="AA", minutesleft=26)
     return maximum(flow1 + flow2 for (state1, flow1) in maxstatesflows, (state2, flow2) in maxstatesflows if (state1 & state2) == 0)
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

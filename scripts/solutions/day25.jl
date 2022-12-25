@@ -21,6 +21,8 @@ end
 
 solution1(input) = encodeSNAFU(sum(decodeSNAFU,input))
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = IOaoc.loadinput(nday, test=test, verbose=false)

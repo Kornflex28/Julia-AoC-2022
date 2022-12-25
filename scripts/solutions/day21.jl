@@ -54,6 +54,8 @@ function solution2(vardicts; var="root", yourvar="humn")
     return -real(complexvar) / imag(complexvar)
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

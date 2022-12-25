@@ -53,6 +53,8 @@ function solution2(data)
 
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

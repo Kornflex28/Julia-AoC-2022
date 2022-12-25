@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 3
 
 ## HELPER FUNCTIONS
+
 getcommonitems(data) = join([intersect(compartiment[1], compartiment[2])[1] for compartiment ∈ data])
 
 getcommonbadge(input) = join([intersect(input[k], input[k+1], input[k+2])[1] for k = 1:3:length(input)])

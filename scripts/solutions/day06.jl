@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 6
 
 ## HELPER FUNCTIONS
+
 function solution(input; kelem=4)
     for k = 1:(length(input)-kelem-1)
         if length(Set(input[k:(k+kelem-1)])) == kelem

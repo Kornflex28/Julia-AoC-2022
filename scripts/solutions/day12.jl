@@ -10,7 +10,6 @@ nday = 12
 ## HELPER FUNCTIONS
 formatinput(input) = Dict((r, c) => ch == 'S' ? -0.1 : ch == 'E' ? 'z' - 'a' + 0.1 : ch - 'a' for (r, l) ∈ enumerate(input) for (c, ch) ∈ enumerate(l))
 
-## MAIN
 function possible_neighbors(heightmap, rc)
     r, c = rc
     Iterators.filter(x -> (x ∈ keys(heightmap) && (heightmap[x] - heightmap[rc] < 2)), ((r + dr, c + dc) for (dr, dc) ∈ [(-1, 0) (1, 0) (0, 1) (0, -1)]))
@@ -41,6 +40,8 @@ function solution2(heightmap)
     steps = isoheights(heightmap, rcstarts)
     return rcend ∈ keys(steps) ? steps[rcend] : typemax(Int64)
 end
+
+## MAIN
 
 if benchmarkmode
 

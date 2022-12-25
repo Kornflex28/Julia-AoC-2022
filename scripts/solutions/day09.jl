@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 9
 
 ## HELPER FUNCTIONS
+
 formatinput(input) = [(d, parse(Int, n)) for (d, n) ∈ map(split, input)]
 
 function solution(steps; nknots=2)

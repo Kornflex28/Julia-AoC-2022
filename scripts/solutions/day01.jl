@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 1
 
 ## HELPER FUNCTIONS
+
 function formatinput(input)
     # Split input by empty string
     splits = [firstindex(input) - 1; findall(isempty, input); lastindex(input) + 1]

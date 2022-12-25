@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 14
 
 ## HELPER FUNCTIONS
+
 function formatinput(input)
     rocklineslist = [[map(x -> parse(Int, x), split(k, ",")) for k ∈ split(l, "->")] for l ∈ input]
     rocks = Set()
@@ -95,6 +96,8 @@ function solution2(rocks; sandstart=(500, 0))
     end
     return units
 end
+
+## MAIN
 
 if benchmarkmode
 
