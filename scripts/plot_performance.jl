@@ -6,7 +6,7 @@ using Dates
 using Plots.PlotMeasures
 
 ## PARAMETERS
-neval = 500
+neval = 3
 include(joinpath(@__DIR__, "time_solutions.jl"))
 # exectimes [neval;nfiles;[formattest,solvetest1,solvetest2,formatpuzzle,solvepuzzle1,solvepuzzle2]]
 
@@ -34,8 +34,8 @@ for (k, thm) ∈ enumerate(["light", "dark"])
 
      xticks!(1:maximum(days))
      threshold = log10(5)
-     mnexp = round(log10(minimum(mediantimes)) - threshold + 0.5)
-     mxexp = ceil(log10(maximum(mediantimes)))
+     mnexp = round(log10(minimum(x for x in mediantimes if !isnan(x))) - threshold + 0.5)
+     mxexp = ceil(log10(maximum(x for x in mediantimes if !isnan(x))))
      ylims!(0.2 * 10^mnexp, 10^(mxexp))
      yticks!(10 .^ (mnexp:mxexp))
 

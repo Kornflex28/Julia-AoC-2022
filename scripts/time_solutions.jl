@@ -15,7 +15,7 @@ nfiles = length(solutions)
 ntotal = nfiles * neval
 # Array of execution times, last dimension is for format/solve/test/puzzle/1/2
 exectimes = fill(NaN, (neval, nfiles, 6))
-days = zeros(nfiles,1)
+days = zeros(nfiles, 1)
 
 
 ## MAIN
@@ -41,12 +41,12 @@ for (ksol, sol) ∈ enumerate(solutions)
         keval == 0 && continue # Don't consider first run (always longer)
 
         # Get timed variables
-        exectimes[keval, ksol, 1] = testinput.time
-        exectimes[keval, ksol, 2] = testsol1.time
-        exectimes[keval, ksol, 3] = testsol2.time
-        exectimes[keval, ksol, 4] = puzzleinput.time
-        exectimes[keval, ksol, 5] = puzzlesol1.time
-        exectimes[keval, ksol, 6] = puzzlesol2.time
+        isnothing(testinput.value) || (exectimes[keval, ksol, 1] = testinput.time)
+        isnothing(testsol1.value) || (exectimes[keval, ksol, 2] = testsol1.time)
+        isnothing(testsol2.value) || (exectimes[keval, ksol, 3] = testsol2.time)
+        isnothing(puzzleinput.value) || (exectimes[keval, ksol, 4] = puzzleinput.time)
+        isnothing(puzzlesol1.value) || (exectimes[keval, ksol, 5] = puzzlesol1.time)
+        isnothing(puzzlesol2.value) || (exectimes[keval, ksol, 6] = puzzlesol2.time)
 
     end
 end
