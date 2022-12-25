@@ -14,12 +14,12 @@ function decodeSNAFU(snafustr)
     return findfirst(snafustr[end], "=-012") - 3 + 5 * decodeSNAFU(snafustr[1:end-1])
 end
 
-function encodeSNAFU(n; ndigits=27)
+# 28 = 2*ceil(log(5,2^32))
+function encodeSNAFU(n; ndigits=28)
     return chopprefix(map(x -> "=-012"[x-'0'+1], string(n + (5^ndigits - 1) >> 1, base=5)),r"0+")
 end
 
 solution1(input) = encodeSNAFU(sum(decodeSNAFU,input))
-# "./25.in" |> readlines .|> decode |> sum |> encode |> println
 
 if benchmarkmode
 
