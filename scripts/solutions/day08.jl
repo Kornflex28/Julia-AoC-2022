@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 8
 
 ## HELPER FUNCTIONS
+
 formatinput(input) = reduce(hcat, [[parse(Int, c) for c ∈ l] for l ∈ input])'
 
 function isvisible(grid, krow, kcol)

@@ -34,6 +34,8 @@ function solution2(postdist, row=4000000)
     end
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

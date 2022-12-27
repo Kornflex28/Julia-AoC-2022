@@ -135,6 +135,8 @@ function solution(wind; nrockfalls=2022)
     return length(tower) - 1 + height
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

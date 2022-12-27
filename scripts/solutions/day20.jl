@@ -23,6 +23,8 @@ function solution(input; key=1, nmix=1)
     return sum(mixed[mod1.(findfirst(iszero, mixed) .+ [1000, 2000, 3000], N)])
 end
 
+## MAIN
+
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))

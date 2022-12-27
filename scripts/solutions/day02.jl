@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 2
 
 ## HELPER FUNCTIONS
+
 function convertRPS(l)
     if l ∈ ["A" "X"]
         return 1

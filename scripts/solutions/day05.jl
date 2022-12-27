@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 5
 
 ## HELPER FUNCTIONS
+
 function formatinput(input)
     sepind = findfirst(isempty, input)
     input[sepind+1:end]

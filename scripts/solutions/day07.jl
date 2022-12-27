@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 7
 
 ## HELPER FUNCTIONS
+
 if !(@isdefined Dir)
     abstract type AbstractFile end
     abstract type AbstractDir end

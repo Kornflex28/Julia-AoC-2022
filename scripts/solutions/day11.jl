@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 11
 
 ## HELPER FUNCTIONS
+
 function formatinput(input)
     monkeysind = findall(l -> occursin(r"^Monkey \d+:", l), input)
     monkeys = []

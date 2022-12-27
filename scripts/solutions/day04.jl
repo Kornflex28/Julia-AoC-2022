@@ -8,6 +8,7 @@ verbose = !benchmarkmode
 nday = 4
 
 ## HELPER FUNCTIONS
+
 formatinput(input) = [[parse(Int, c) for c ∈ split(pair, (',', '-'))] for pair ∈ input]
 
 fullycontains(pair) = (pair[3] <= pair[1] <= pair[4] && pair[3] <= pair[2] <= pair[4]) || (pair[1] <= pair[3] <= pair[2] && pair[1] <= pair[4] <= pair[2])
