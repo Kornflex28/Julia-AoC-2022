@@ -6,7 +6,7 @@ using Dates
 using Plots.PlotMeasures
 
 ## PARAMETERS
-neval = 500
+neval = 50
 include(joinpath(@__DIR__, "time_solutions.jl"))
 # exectimes [neval;nfiles;[formattest,solvetest1,solvetest2,formatpuzzle,solvepuzzle1,solvepuzzle2]]
 
