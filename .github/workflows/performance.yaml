@@ -1,5 +1,9 @@
 name: plot-performance
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+    - "master"
+  workflow_dispatch:
 jobs:
   plot-performance:
     runs-on: ubuntu-latest
