@@ -39,7 +39,7 @@ if !(@isdefined CollectingState)
     end
 end
 
-copy(self::CollectingState) = CollectingState([getfield(self, fn) for fn ∈ fieldnames(CollectingState)]...)
+Base.copy(self::CollectingState) = CollectingState([getfield(self, fn) for fn ∈ fieldnames(CollectingState)]...)
 
 
 function collect!(self::CollectingState, time::Integer=1)
@@ -73,15 +73,15 @@ end
 function timetobot(self::CollectingState, bp::BluePrint, bot::AbstractString; buildtime::Integer=1)
     # Return number of time units to get to specific bot (nothing if impossible)
     if bot == "ore"
-        return UInt16(cld(max(0, bp.orebot - self.ore), self.orebot) + buildtime)
+        return UInt8(cld(bp.orebot <= self.ore ? 0 : bp.orebot - self.ore, self.orebot) + buildtime)
     elseif bot == "clay"
-        return UInt16(cld(max(0, bp.claybot - self.ore), self.orebot) + buildtime)
+        return UInt8(cld(bp.claybot <= self.ore ? 0 : bp.claybot - self.ore, self.orebot) + buildtime)
     elseif bot == "obsidian"
         (self.orebot == 0 || self.claybot == 0) && return NaN
-        return UInt16(max(cld(max(0, bp.obsidianbot[1] - self.ore), self.orebot), cld(max(0, bp.obsidianbot[2] - self.clay), self.claybot)) + buildtime)
+        return UInt8(max(cld(bp.obsidianbot[1] <= self.ore ? 0 : bp.obsidianbot[1] - self.ore, self.orebot), cld(bp.obsidianbot[2] <= self.clay ? 0 : bp.obsidianbot[2] - self.clay, self.claybot)) + buildtime)
     elseif bot == "geode"
         (self.orebot == 0 || self.obsidianbot == 0) && return NaN
-        return UInt16(max(cld(max(0, bp.geodebot[1] - self.ore), self.orebot), cld(max(0, bp.geodebot[2] - self.obsidian), self.obsidianbot)) + buildtime)
+        return UInt8(max(cld(bp.geodebot[1] <= self.ore ? 0 : bp.geodebot[1] - self.ore, self.orebot), cld(bp.geodebot[2] <= self.obsidian ? 0 : bp.geodebot[2] - self.obsidian, self.obsidianbot)) + buildtime)
     else
         error("Unknow bot : $(bot)")
     end
@@ -89,52 +89,54 @@ end
 
 function getcurrentmaxgeodes(self::CollectingState, bp::BluePrint)
     # Simulate spawning a geodebot every minute
-    timetocollect = bp.geodebot[2] <= self.obsidian ? UInt16(self.remaining) : UInt16(max(1, self.remaining - 1))
+    timetocollect = bp.geodebot[2] <= self.obsidian ? UInt8(self.remaining) : UInt8(max(1, self.remaining - 1))
     return timetocollect * (timetocollect - 1) ÷ 2
 end
 
-function getmaxgeodes(self::CollectingState, bp::BluePrint, current, best, selfcache)
+function getmaxgeodes(self::CollectingState, bp::BluePrint, currentgeodes, maxgeodes, selfcache)
 
     self.remaining <= 1 && return 0
-    # haskey(selfcache, self) && return selfcache[self]
-    # (current + getcurrentmaxgeodes(self, bp) <= best[1]) && return [0 best[1]]
+    haskey(selfcache, self) && return selfcache[self]
+    (currentgeodes + getcurrentmaxgeodes(self, bp) <= maxgeodes[1]) && return 0
 
-    my_best = 0
-    timetoorebot = timetobot(self, bp, "ore")
-    timetoclaybot = timetobot(self, bp, "clay")
-    timetoobsidianbot = timetobot(self, bp, "obsidian")
+    currentmaxgeodes = 0
+
     timetogeodebot = timetobot(self, bp, "geode")
-
+    timetoobsidianbot = timetobot(self, bp, "obsidian")
+    timetoclaybot = timetobot(self, bp, "clay")
+    timetoorebot = timetobot(self, bp, "ore")
+    
     if timetogeodebot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetogeodebot), bp, "geode")
-        my_best = getmaxgeodes(nextself, bp, current + nextself.remaining, best, selfcache) + nextself.remaining
+        currentmaxgeodes = getmaxgeodes(nextself, bp, currentgeodes + nextself.remaining, maxgeodes, selfcache) + nextself.remaining
     end
 
     if self.obsidianbot < bp.geodebot[2] && 3 <= self.remaining && timetoobsidianbot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoobsidianbot), bp, "obsidian")
-        my_best = max(my_best, getmaxgeodes(    nextself, bp, current, best, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
     end
 
     if self.claybot < bp.obsidianbot[2] && 4 <= self.remaining && timetoclaybot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoclaybot), bp, "clay")
-        my_best = max(my_best, getmaxgeodes(nextself, bp, current, best, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
     end
 
     if self.orebot < bp.maxore && 3 <= self.remaining && timetoorebot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoorebot), bp, "ore")
-        my_best = max(my_best, getmaxgeodes(nextself, bp, current, best, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
     end
 
-    # selfcache[self] = [my_best, best[1]]
-    best[1] = max(best[1], my_best + current)
-    # println([my_best, best[1]])
-    return my_best
+    selfcache[self] = currentmaxgeodes
+    maxgeodes[1] = max(maxgeodes[1], currentmaxgeodes + currentgeodes)
+    return currentmaxgeodes
 end
 
 function solution1(bps)
-    for bp ∈ bps
-        println(getmaxgeodes(CollectingState(24),bp,0,[0],Dict()))
-    end
+    return sum(k * getmaxgeodes(CollectingState(24), bp, 0, [0], Dict()) for (k, bp) ∈ enumerate(bps))
+end
+
+function solution2(bps)
+    return prod(getmaxgeodes(CollectingState(32), bp, 0, [0], Dict()) for bp ∈ bps[1:min(3, end)])
 end
 
 
@@ -159,15 +161,15 @@ if benchmarkmode
 else
 
     testinput = formatinput(IOaoc.loadinput(nday, test=true, verbose=verbose))
-    #     puzzleinput = formatinput(IOaoc.loadinput(nday, verbose=verbose))
+    puzzleinput = formatinput(IOaoc.loadinput(nday, verbose=verbose))
 
     testsol1 = solution1(testinput)
-    #     puzzlesol1 = solution1(puzzleinput)
+    puzzlesol1 = solution1(puzzleinput)
 
-    #     testsol2 = solution2(testinput)
-    #     puzzlesol2 = solution2(puzzleinput)
+    testsol2 = solution2(testinput)
+    puzzlesol2 = solution2(puzzleinput)
 
-    #     if verbose
-    #         IOaoc.printsol(testsol1, testsol2, puzzlesol1, puzzlesol2)
-    #     end
+    if verbose
+        IOaoc.printsol(testsol1, testsol2, puzzlesol1, puzzlesol2)
+    end
 end
