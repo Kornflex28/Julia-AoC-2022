@@ -107,7 +107,7 @@ function solution(data; cubesize=50,wrapfun=wrapcube1)
             nextpos = (f=pos.f, c=pos.c + pos.f)
             nextpos.c ∉ keys(setmap) && (nextpos = wrapfun(nextpos, cubesize=cubesize))
             # If wall is at nextpos we stop the step
-            setmap[nextpos.c] && (c+=1;break)
+            setmap[nextpos.c] && break
             # Else we update pos
             pos = nextpos
         end
@@ -121,7 +121,7 @@ end
 if benchmarkmode
 
     tformatinput(nday; test=true) = formatinput(IOaoc.loadinput(nday, test=test, verbose=false))
-    tsolution1(input) =  length(input[1]) < 10 ? solution(input,cubesize=4,wrapfun=wrapcube1) : solution(input,wrapfun=wrapcube1)
+    tsolution1(input) =  length(input[1]) < 10 ? solution(input,cubesize=4) : solution(input)
     tsolution2(input) = length(input[1]) < 10 ? 5031 : solution(input,wrapfun=wrapcube2)
 
 else
