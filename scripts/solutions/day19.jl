@@ -87,17 +87,16 @@ function timetobot(self::CollectingState, bp::BluePrint, bot::AbstractString; bu
     end
 end
 
-function getcurrentmaxgeodes(self::CollectingState, bp::BluePrint)
+function maxpossiblegeodes(self::CollectingState, bp::BluePrint)
     # Simulate spawning a geodebot every minute
     timetocollect = bp.geodebot[2] <= self.obsidian ? UInt8(self.remaining) : UInt8(max(1, self.remaining - 1))
     return timetocollect * (timetocollect - 1) ÷ 2
 end
 
-function getmaxgeodes(self::CollectingState, bp::BluePrint, currentgeodes, maxgeodes, selfcache)
+function getmaxgeodes(self::CollectingState, bp::BluePrint, currentgeodes, maxgeodes)
 
     self.remaining <= 1 && return 0
-    haskey(selfcache, self) && return selfcache[self]
-    (currentgeodes + getcurrentmaxgeodes(self, bp) <= maxgeodes[1]) && return 0
+    (currentgeodes + maxpossiblegeodes(self, bp) <= maxgeodes[1]) && return 0
 
     currentmaxgeodes = 0
 
@@ -108,35 +107,34 @@ function getmaxgeodes(self::CollectingState, bp::BluePrint, currentgeodes, maxge
     
     if timetogeodebot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetogeodebot), bp, "geode")
-        currentmaxgeodes = getmaxgeodes(nextself, bp, currentgeodes + nextself.remaining, maxgeodes, selfcache) + nextself.remaining
+        currentmaxgeodes = getmaxgeodes(nextself, bp, currentgeodes + nextself.remaining, maxgeodes) + nextself.remaining
     end
 
-    if self.obsidianbot < bp.geodebot[2] && 3 <= self.remaining && timetoobsidianbot < self.remaining
+    if self.obsidianbot < bp.geodebot[2] && 4 <= self.remaining && timetoobsidianbot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoobsidianbot), bp, "obsidian")
-        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes))
     end
 
-    if self.claybot < bp.obsidianbot[2] && 4 <= self.remaining && timetoclaybot < self.remaining
+    if self.claybot < bp.obsidianbot[2] && 7 <= self.remaining && timetoclaybot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoclaybot), bp, "clay")
-        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes))
     end
 
-    if self.orebot < bp.maxore && 3 <= self.remaining && timetoorebot < self.remaining
+    if self.orebot < bp.maxore && 16 <= self.remaining && timetoorebot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetoorebot), bp, "ore")
-        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes, selfcache))
+        currentmaxgeodes = max(currentmaxgeodes, getmaxgeodes(nextself, bp, currentgeodes, maxgeodes))
     end
 
-    selfcache[self] = currentmaxgeodes
     maxgeodes[1] = max(maxgeodes[1], currentmaxgeodes + currentgeodes)
     return currentmaxgeodes
 end
 
 function solution1(bps)
-    return sum(k * getmaxgeodes(CollectingState(24), bp, 0, [0], Dict()) for (k, bp) ∈ enumerate(bps))
+    return sum(k * getmaxgeodes(CollectingState(24), bp, 0, [0]) for (k, bp) ∈ enumerate(bps))
 end
 
 function solution2(bps)
-    return prod(getmaxgeodes(CollectingState(32), bp, 0, [0], Dict()) for bp ∈ bps[1:min(3, end)])
+    return prod(getmaxgeodes(CollectingState(32), bp, 0, [0]) for bp ∈ bps[1:min(3, end)])
 end
 
 
