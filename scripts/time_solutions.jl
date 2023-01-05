@@ -31,10 +31,10 @@ for (ksol, sol) ∈ enumerate(solutions)
         @printf("\r(%d/%d) Execution %d/%d of %s ...", (ksol - 1) * neval + keval, ntotal, keval, neval, sol)
 
         # Execute solution
-        puzzleinput = @timed tformatinput(nday)
+        puzzleinput = @timed tformatinput(nday, test=false)
         puzzlesol1 = @timed tsolution1(puzzleinput.value)
         puzzlesol2 = @timed tsolution2(puzzleinput.value)
-        testinput = @timed tformatinput(nday, test=true)
+        testinput = @timed tformatinput(nday)
         testsol1 = @timed tsolution1(testinput.value)
         testsol2 = @timed tsolution2(testinput.value)
 
