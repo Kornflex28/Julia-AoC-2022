@@ -96,9 +96,8 @@ else
     puzzlesol1 = solution1(puzzleinput)
 
     testsol2 = solution2(testinput)
-    for k in 1:10
-        @timed puzzlesol2 = solution2(puzzleinput)
-    end
+    puzzlesol2 = solution2(puzzleinput)
+    
     if verbose
         IOaoc.printsol(testsol1, testsol2, puzzlesol1, puzzlesol2)
     end

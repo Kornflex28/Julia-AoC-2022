@@ -9,35 +9,32 @@ nday = 19
 
 ## HELPER FUNCTIONS
 
-if !(@isdefined BluePrint)
-    mutable struct BluePrint
-        orebot::UInt8
-        claybot::UInt8
-        obsidianbot::Tuple{UInt8,UInt8}
-        geodebot::Tuple{UInt8,UInt8}
-        maxore::UInt8
+mutable struct BluePrint
+    orebot::UInt8
+    claybot::UInt8
+    obsidianbot::Tuple{UInt8,UInt8}
+    geodebot::Tuple{UInt8,UInt8}
+    maxore::UInt8
 
-        # Constructor
-        function BluePrint(orebot, claybot, obsidianbot, geodebot)
-            new(orebot, claybot, obsidianbot, geodebot, max(orebot, claybot, obsidianbot[1], geodebot[1]))
-        end
+    # Constructor
+    function BluePrint(orebot, claybot, obsidianbot, geodebot)
+        new(orebot, claybot, obsidianbot, geodebot, max(orebot, claybot, obsidianbot[1], geodebot[1]))
     end
 end
 
-if !(@isdefined CollectingState)
-    mutable struct CollectingState
-        remaining::UInt8
-        orebot::UInt8
-        claybot::UInt8
-        obsidianbot::UInt8
-        ore::UInt8
-        clay::UInt8
-        obsidian::UInt8
+mutable struct CollectingState
+    remaining::UInt8
+    orebot::UInt8
+    claybot::UInt8
+    obsidianbot::UInt8
+    ore::UInt8
+    clay::UInt8
+    obsidian::UInt8
 
-        # Constructor
-        CollectingState(remaining::Integer=24, orebot::Integer=1, claybot::Integer=0, obsidianbot::Integer=0, ore::Integer=0, clay::Integer=0, obsidian::Integer=0) = new(remaining, orebot, claybot, obsidianbot, ore, clay, obsidian)
-    end
+    # Constructor
+    CollectingState(remaining::Integer=24, orebot::Integer=1, claybot::Integer=0, obsidianbot::Integer=0, ore::Integer=0, clay::Integer=0, obsidian::Integer=0) = new(remaining, orebot, claybot, obsidianbot, ore, clay, obsidian)
 end
+
 
 Base.copy(self::CollectingState) = CollectingState([getfield(self, fn) for fn ∈ fieldnames(CollectingState)]...)
 
@@ -104,7 +101,7 @@ function getmaxgeodes(self::CollectingState, bp::BluePrint, currentgeodes, maxge
     timetoobsidianbot = timetobot(self, bp, "obsidian")
     timetoclaybot = timetobot(self, bp, "clay")
     timetoorebot = timetobot(self, bp, "ore")
-    
+
     if timetogeodebot < self.remaining
         nextself = buildbot!(collect!(copy(self), timetogeodebot), bp, "geode")
         currentmaxgeodes = getmaxgeodes(nextself, bp, currentgeodes + nextself.remaining, maxgeodes) + nextself.remaining

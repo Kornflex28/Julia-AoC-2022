@@ -9,83 +9,80 @@ nday = 7
 
 ## HELPER FUNCTIONS
 
-if !(@isdefined Dir)
-    abstract type AbstractFile end
-    abstract type AbstractDir end
+abstract type AbstractFile end
+abstract type AbstractDir end
 
-    function addchildren!(d::AbstractDir, c::Union{<:AbstractDir,<:AbstractFile})
-        if isnothing(d.children)
-            d.children = [c]
-        else
-            push!(d.children, c)
-        end
+function addchildren!(d::AbstractDir, c::Union{<:AbstractDir,<:AbstractFile})
+    if isnothing(d.children)
+        d.children = [c]
+    else
+        push!(d.children, c)
     end
+end
 
-    mutable struct Dir <: AbstractDir
-        name::AbstractString
-        parent::Union{Dir,Nothing}
-        children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}
+mutable struct Dir <: AbstractDir
+    name::AbstractString
+    parent::Union{Dir,Nothing}
+    children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}
 
-        function Dir(name::AbstractString, parent::Union{Dir,Nothing}=nothing, children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}=nothing)
-            d = new(name, parent, children)
-            if !isnothing(parent)
-                addchildren!(parent, d)
-            end
-            return d
+    function Dir(name::AbstractString, parent::Union{Dir,Nothing}=nothing, children::Union{Vector{Union{Dir,<:AbstractFile}},Nothing}=nothing)
+        d = new(name, parent, children)
+        if !isnothing(parent)
+            addchildren!(parent, d)
         end
+        return d
     end
+end
 
-    function findchildbyname(d::Dir, name::AbstractString; isDir=true)
-        if isDir
-            return d.children[findfirst(c -> isa(c, Dir) && c.name == name, d.children)]
-        else
-            return d.children[findfirst(c -> !isa(c, Dir) && c.name == name, d.children)]
-        end
+function findchildbyname(d::Dir, name::AbstractString; isDir=true)
+    if isDir
+        return d.children[findfirst(c -> isa(c, Dir) && c.name == name, d.children)]
+    else
+        return d.children[findfirst(c -> !isa(c, Dir) && c.name == name, d.children)]
     end
-
 end
 
 
-if !(@isdefined File)
-    mutable struct File <: AbstractFile
-        name::AbstractString
-        parent::Dir
-        size::Int
-        function File(name::AbstractString, parent::Dir, size::Int)
-            f = new(name, parent, size)
-            addchildren!(parent, f)
-            return f
-        end
-    end
 
-    function getsize(dorf::Union{Dir,File})
-        if isa(dorf, File)
-            return dorf.size
-        else
-            return sum([getsize(child) for child ∈ dorf.children])
-        end
+mutable struct File <: AbstractFile
+    name::AbstractString
+    parent::Dir
+    size::Int
+    function File(name::AbstractString, parent::Dir, size::Int)
+        f = new(name, parent, size)
+        addchildren!(parent, f)
+        return f
     end
-
-    function getalldirs(d::Dir)
-        if isnothing(d.children)
-            return []
-        else
-            childrendir = d.children[findall(c -> isa(c, Dir), d.children)]
-            return [d [getalldirs(c) for c ∈ childrendir]...]
-        end
-    end
-
-    function Base.show(io::IO, s::Union{Dir,File})
-        parentstr = isnothing(s.parent) ? nothing : s.parent.name
-        childrenstr = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c ∈ s.children], ",")
-        if isnothing(childrenstr)
-            print(io, "[$(s.name), $(parentstr)]")
-        else
-            print(io, "[$(s.name), $(parentstr), ($(childrenstr))]")
-        end
-    end
-
 end
+
+function getsize(dorf::Union{Dir,File})
+    if isa(dorf, File)
+        return dorf.size
+    else
+        return sum([getsize(child) for child ∈ dorf.children])
+    end
+end
+
+function getalldirs(d::Dir)
+    if isnothing(d.children)
+        return []
+    else
+        childrendir = d.children[findall(c -> isa(c, Dir), d.children)]
+        return [d [getalldirs(c) for c ∈ childrendir]...]
+    end
+end
+
+function Base.show(io::IO, s::Union{Dir,File})
+    parentstr = isnothing(s.parent) ? nothing : s.parent.name
+    childrenstr = (isa(s, File) || isnothing(s.children)) ? nothing : join([c.name for c ∈ s.children], ",")
+    if isnothing(childrenstr)
+        print(io, "[$(s.name), $(parentstr)]")
+    else
+        print(io, "[$(s.name), $(parentstr), ($(childrenstr))]")
+    end
+end
+
+
 function splitcmd(l)
     _, cmd, ags... = split(l)
     return cmd, ags
